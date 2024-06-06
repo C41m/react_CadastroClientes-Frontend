@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Modal, Button, Form, Alert } from "react-bootstrap";
+import { Button, Form, Alert } from "react-bootstrap";
 
 import TableClients from "./TableClients";
 import FormCliente from "./FormCliente";
@@ -17,6 +17,7 @@ const CrudComponent = () => {
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [filtrado, setFiltrado] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -27,6 +28,7 @@ const CrudComponent = () => {
       const response = await axios.get("https://localhost:7264/api/Cliente");
       setClientes(response.data);
       setFiltrado(false);
+      setLoading(false);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     }
@@ -142,6 +144,7 @@ const CrudComponent = () => {
         clientes={clientes}
         fetchData={fetchData}
         onDeletarClick={handleDeleteClick}
+        loading={loading}
       />
 
       <FormCliente

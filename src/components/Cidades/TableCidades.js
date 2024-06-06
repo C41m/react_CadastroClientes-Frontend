@@ -31,6 +31,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
   };
 
   const handleSaveClick = async () => {
+    // Verificações do campo de edição
     try {
       if (editedCidade.estado.length === 0) {
         toast.error("Digite a sigla do estado.");
