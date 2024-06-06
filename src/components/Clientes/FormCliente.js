@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Form, Button, Spinner } from "react-bootstrap";
+import { Form, Button, Spinner, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/FormCliente.css"; // Importa o arquivo CSS
 
-const FormCliente = ({ modo, clienteParaEditar, onClienteAdicionado }) => {
+const FormCliente = ({
+  modo,
+  clienteParaEditar,
+  onClienteAdicionado,
+  showModal,
+  onHide,
+}) => {
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [sexo, setSexo] = useState("");
@@ -19,28 +25,29 @@ const FormCliente = ({ modo, clienteParaEditar, onClienteAdicionado }) => {
     const fetchData = async () => {
       try {
         const responseEstados = await axios.get(
-          "https://localhost:7264/api/Cidade"
+          "https://localhost:7264/api/cidade"
         );
-        setEstados(responseEstados.data.dados);
+        console.log("Chamada");
+        setEstados(responseEstados.data);
 
         if (modo === "editar" && clienteParaEditar) {
-          setNome(clienteParaEditar.nome || "");
-          setSobrenome(clienteParaEditar.sobrenome || "");
-          setSexo(clienteParaEditar.sexo || "");
-          setDataNascimento(clienteParaEditar.dataNascimento || "");
-          setEstado(clienteParaEditar.estado || "");
-          handleEstadoChange(clienteParaEditar.estado);
-          setCidade(clienteParaEditar.cidade || "");
+          setNome(clienteParaEditar.nome);
+          setSobrenome(clienteParaEditar.sobrenome);
+          setSexo(clienteParaEditar.sexo);
+          setDataNascimento(clienteParaEditar.dataNascimento);
+          setEstado(clienteParaEditar.cidade.estado); // Agora estamos usando diretamente clienteParaEditar.estado
+          handleEstadoChange(clienteParaEditar.cidade.estado);
+          setCidade(clienteParaEditar.cidade.id); // Definir o estado cidade com a cidade do clienteParaEditar
         }
 
         setLoading(false);
       } catch (error) {
-        console.error("Erro ao buscar dados:", error);
+        // console.error("Erro ao buscar dados:", error);
       }
     };
 
     fetchData();
-  }, [modo, clienteParaEditar]);
+  }, [clienteParaEditar, modo]);
 
   const handleEstadoChange = async (selectedEstado) => {
     try {
@@ -48,7 +55,7 @@ const FormCliente = ({ modo, clienteParaEditar, onClienteAdicionado }) => {
       const responseCidades = await axios.get(
         `https://localhost:7264/api/Cidade/estado/${selectedEstado}`
       );
-      setCidades(responseCidades.data.dados);
+      setCidades(responseCidades.data);
       setLoading(false);
     } catch (error) {
       console.error("Erro ao buscar cidades:", error);
@@ -58,15 +65,14 @@ const FormCliente = ({ modo, clienteParaEditar, onClienteAdicionado }) => {
   // Validação Nome
   const handleNomeChange = (e) => {
     const value = e.target.value;
-    if (/^[a-zA-Z]*$/.test(value)) {
+    if (/^[a-zA-Z\s]*$/.test(value)) {
       setNome(value.toUpperCase());
     }
   };
-
   // Validação Sobrenome
   const handleSobrenomeChange = (e) => {
     const value = e.target.value;
-    if (/^[a-zA-Z]*$/.test(value)) {
+    if (/^[a-zA-Z\s]*$/.test(value)) {
       setSobrenome(value.toUpperCase());
     }
   };
@@ -74,32 +80,26 @@ const FormCliente = ({ modo, clienteParaEditar, onClienteAdicionado }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const novoCliente = {
-        id: clienteParaEditar?.id || 0,
+      const clientForm = {
+        id: clienteParaEditar?.id,
         nome,
         sobrenome,
         sexo,
         dataNascimento,
-        idade: calcularIdade(dataNascimento),
-        cidade,
-        estado,
         ativo: true,
-        dataCriacao: new Date().toISOString(),
-        dataAlteracao: new Date().toISOString(),
+        cidadeId: parseInt(cidade),
       };
-
-      console.log("Novo cliente:", novoCliente);
 
       if (modo === "adicionar") {
         const response = await axios.post(
           "https://localhost:7264/api/cliente",
-          novoCliente
+          clientForm
         );
         console.log("Resposta do servidor:", response.data);
       } else if (modo === "editar" && clienteParaEditar) {
         const response = await axios.put(
-          `https://localhost:7264/api/Cliente/`,
-          novoCliente
+          `https://localhost:7264/api/cliente/`,
+          clientForm
         );
         console.log("Resposta do servidor:", response.data);
       }
@@ -117,125 +117,125 @@ const FormCliente = ({ modo, clienteParaEditar, onClienteAdicionado }) => {
     }
   };
 
-  const calcularIdade = (dataNascimento) => {
-    const hoje = new Date();
-    const nascimento = new Date(dataNascimento);
-    let idade = hoje.getFullYear() - nascimento.getFullYear();
-    const mes = hoje.getMonth() - nascimento.getMonth();
-    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
-      idade--;
-    }
-    return idade;
-  };
-
   return (
-    <>
-      {loading ? (
-        <div className="d-flex justify-content-center">
-          <Spinner animation="border" role="status"></Spinner>
-        </div>
-      ) : (
-        <Form className="form-container" onSubmit={handleSubmit}>
-          <Form.Group controlId="formNome">
-            <Form.Label className="form-label">Nome:</Form.Label>
-            <Form.Control
-              type="text"
-              value={nome}
-              onChange={handleNomeChange}
-              className="form-control"
-              required
-            />
-          </Form.Group>
+    <Modal show={showModal} onHide={onHide}>
+      <Modal.Header closeButton>
+        <Modal.Title>
+          {modo === "adicionar" ? "Adicionar Novo Cliente" : "Editar Cliente"}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {loading ? (
+          <div className="d-flex justify-content-center">
+            <Spinner animation="border" role="status"></Spinner>
+          </div>
+        ) : (
+          <Form className="form-container" onSubmit={handleSubmit}>
+            <Form.Group controlId="formNome">
+              <Form.Label className="form-label">Nome:</Form.Label>
+              <Form.Control
+                type="text"
+                value={nome}
+                onChange={handleNomeChange}
+                className="form-control"
+                required
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formSobrenome">
-            <Form.Label className="form-label">Sobrenome:</Form.Label>
-            <Form.Control
-              type="text"
-              value={sobrenome}
-              onChange={handleSobrenomeChange}
-              className="form-control"
-              required
-            />
-          </Form.Group>
+            <Form.Group controlId="formSobrenome">
+              <Form.Label className="form-label">Sobrenome:</Form.Label>
+              <Form.Control
+                type="text"
+                value={sobrenome}
+                onChange={handleSobrenomeChange}
+                className="form-control"
+                required
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formSexo">
-            <Form.Label className="form-label">Sexo:</Form.Label>
-            <Form.Control
-              as="select"
-              value={sexo}
-              onChange={(e) => setSexo(e.target.value)}
-              className="form-control-select"
-              required
-            >
-              <option value="">Selecione</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Feminino">Feminino</option>
-              <option value="Outro">Outro</option>
-            </Form.Control>
-          </Form.Group>
+            <Form.Group controlId="formSexo">
+              <Form.Label className="form-label">Sexo:</Form.Label>
+              <Form.Control
+                as="select"
+                value={sexo}
+                onChange={(e) => setSexo(e.target.value)}
+                className="form-control-select"
+                required
+              >
+                <option value="">Selecione</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+              </Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId="formDataNascimento">
-            <Form.Label className="form-label">Data de Nascimento:</Form.Label>
-            <Form.Control
-              type="date"
-              value={
-                dataNascimento
-                  ? new Date(dataNascimento).toISOString().split("T")[0]
-                  : ""
-              }
-              onChange={(e) => setDataNascimento(e.target.value)}
-              className="form-control"
-              required
-            />
-          </Form.Group>
+            <Form.Group controlId="formDataNascimento">
+              <Form.Label className="form-label">
+                Data de Nascimento:
+              </Form.Label>
+              <Form.Control
+                type="date"
+                value={
+                  dataNascimento
+                    ? new Date(dataNascimento).toISOString().split("T")[0]
+                    : ""
+                }
+                onChange={(e) => setDataNascimento(e.target.value)}
+                className="form-control"
+                required
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formEstado">
-            <Form.Label className="form-label">Estado:</Form.Label>
-            <Form.Control
-              as="select"
-              value={estado}
-              onChange={(e) => {
-                setEstado(e.target.value);
-                handleEstadoChange(e.target.value);
-              }}
-              className="form-control-select"
-              required
-            >
-              <option value="">Selecione</option>
-              {[...new Set(estados.map((estado) => estado.estado))].map(
-                (estado, index) => (
-                  <option key={index} value={estado}>
-                    {estado}
+            <Form.Group controlId="formEstado">
+              <Form.Label className="form-label">Estado:</Form.Label>
+              <Form.Control
+                as="select"
+                value={estado}
+                onChange={(e) => {
+                  setEstado(e.target.value);
+                  handleEstadoChange(e.target.value);
+                }}
+                className="form-control-select"
+                required
+              >
+                <option value="">Selecione</option>
+                {[...new Set(estados.map((estado) => estado.estado))].map(
+                  (estado, index) => (
+                    <option key={index} value={estado}>
+                      {estado}
+                    </option>
+                  )
+                )}
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="formCidade">
+              <Form.Label className="form-label">Cidade:</Form.Label>
+              <Form.Control
+                as="select"
+                value={cidade}
+                onChange={(e) => {
+                  setCidade(e.target.value);
+                }}
+                className="form-control-select"
+                required
+              >
+                <option value="">Selecione</option>
+                {cidades.map((cidadeItem, index) => (
+                  <option key={cidadeItem.id} value={cidadeItem.id}>
+                    {cidadeItem.cidade}
                   </option>
-                )
-              )}
-            </Form.Control>
-          </Form.Group>
+                ))}
+              </Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId="formCidade">
-            <Form.Label className="form-label">Cidade:</Form.Label>
-            <Form.Control
-              as="select"
-              value={cidade}
-              onChange={(e) => setCidade(e.target.value)}
-              className="form-control-select"
-              required
-            >
-              <option value="">Selecione</option>
-              {cidades.map((cidade, index) => (
-                <option key={index} value={cidade.cidade}>
-                  {cidade.cidade}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-
-          <Button variant="primary" type="submit" className="btn-primary">
-            {modo === "adicionar" ? "Adicionar Cliente" : "Salvar Alterações"}
-          </Button>
-        </Form>
-      )}
-    </>
+            <Button variant="primary" type="submit" className="btn-primary">
+              {modo === "adicionar" ? "Adicionar Cliente" : "Salvar Alterações"}
+            </Button>
+          </Form>
+        )}
+      </Modal.Body>
+    </Modal>
   );
 };
 

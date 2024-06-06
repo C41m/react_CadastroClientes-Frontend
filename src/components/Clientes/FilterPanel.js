@@ -40,9 +40,6 @@ const ClientManagement = () => {
 
   // Chamada à API para buscar dados dos clientes
   useEffect(() => {
-    // Aqui você faria a chamada à API para buscar os dados dos clientes
-    // e atualizaria o estado "clientes" com os dados obtidos
-    // Exemplo fictício:
     const fetchClientes = async () => {
       const response = await fetch("api/clientes");
       const data = await response.json();

@@ -20,7 +20,7 @@ const ModalFormCidade = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get("https://localhost:7264/api/cidade");
-      setCidades(response.data.dados);
+      setCidades(response.data);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
       toast.error("Erro ao buscar dados!");

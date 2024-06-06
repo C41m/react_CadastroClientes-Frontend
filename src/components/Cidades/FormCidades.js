@@ -10,32 +10,28 @@ const FormCidades = ({ onCidadeAdicionada, handleCloseModal }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const novaCidade = {
         cidade: cidade.toUpperCase(),
         estado: estado.toUpperCase(),
       };
 
-      const response = await axios.post(
-        "https://localhost:7264/api/Cidade",
-        novaCidade
-      );
+      if (estado.length < 2) {
+        toast.error("Digite a sigla do estado corretamente.");
+        return;
+      }
 
-      const responseMessage = response.data.mensagem; // Captura a resposta da API
+      await axios.post("https://localhost:7264/api/Cidade", novaCidade);
 
       setCidade("");
       setEstado("");
 
-      if (responseMessage === "Cidade já cadastrada neste estado.") {
-        toast.info(responseMessage);
-      } else {
-        // Exibe a notificação de sucesso e fecha o modal
-        toast.success("Cidade adicionada com sucesso!");
-        onCidadeAdicionada();
-      }
-    } catch (error) {
-      console.error("Erro ao adicionar cidade:", error);
-      toast.error("Erro ao adicionar cidade!");
+      toast.success("Cidade adicionada com sucesso!");
+      onCidadeAdicionada();
+    } catch (errors) {
+      // console.log(errors.response.data.errors.Estado);
+      toast.error(errors.response.data.errors.Estado[0]);
     }
   };
 
@@ -44,20 +40,25 @@ const FormCidades = ({ onCidadeAdicionada, handleCloseModal }) => {
   };
 
   const handleEstadoChange = (e) => {
-    const value = e.target.value.toUpperCase();
-    if (value.length <= 2) {
-      setEstado(value);
+    const estado = e.target.value.toUpperCase();
+
+    // Verificar se contém números ou espaços
+    const containsNumbers = /\d/.test(estado);
+    const containsSpaces = /\s/.test(estado);
+
+    if (estado.length <= 2 && !containsNumbers && !containsSpaces) {
+      setEstado(estado);
     }
   };
 
   return (
-    <Form onSubmit={handleSubmit} onAbort={handleCloseModal}>
+    <Form
+      className="container-form-cidade"
+      onSubmit={handleSubmit}
+      onAbort={handleCloseModal}
+    >
       <div className="form-cidade">
-        <Form.Group
-          bsPrefix
-          className="form-cidade-input"
-          controlId="formCidade"
-        >
+        <Form.Group bsPrefix controlId="formCidade">
           <Form.Label>Cidade:</Form.Label>
           <Form.Control
             type="text"
@@ -67,11 +68,7 @@ const FormCidades = ({ onCidadeAdicionada, handleCloseModal }) => {
           />
         </Form.Group>
 
-        <Form.Group
-          bsPrefix
-          className="form-estado-input"
-          controlId="formEstado"
-        >
+        <Form.Group bsPrefix controlId="formEstado">
           <Form.Label>Estado (UF):</Form.Label>
           <Form.Control
             type="text"
@@ -90,6 +87,7 @@ const FormCidades = ({ onCidadeAdicionada, handleCloseModal }) => {
           Voltar
         </Button>
       </div>
+      <hr />
     </Form>
   );
 };

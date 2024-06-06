@@ -24,30 +24,39 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
     if (cidade) {
       setEditedCidade({
         id: cidade.id,
-        cidade: cidade.cidade.toUpperCase(),
-        estado: cidade.estado.toUpperCase(),
+        cidade: cidade.cidade,
+        estado: cidade.estado,
       });
     }
   };
 
   const handleSaveClick = async () => {
     try {
+      if (editedCidade.estado.length === 0) {
+        toast.error("Digite a sigla do estado.");
+        return;
+      }
+      if (editedCidade.estado.length < 2) {
+        toast.error("Digite a sigla do estado corretamente.");
+        return;
+      }
+
       const response = await axios.put(`https://localhost:7264/api/Cidade/`, {
         ...editedCidade,
         cidade: editedCidade.cidade.toUpperCase(),
         estado: editedCidade.estado.toUpperCase(),
       });
 
-      if (response.data && response.data.sucesso) {
+      if (response.data) {
         toast.success("Cidade editada com sucesso!");
         onCidadeEditada();
         setEditMode(null);
       } else {
-        toast.error(response.data.mensagem);
+        toast.error(response.data);
       }
     } catch (error) {
       console.error("Erro ao editar cidade:", error);
-      toast.error("Erro ao editar cidade!");
+      toast.error(error.response.data);
     }
   };
 
@@ -62,16 +71,16 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
         `https://localhost:7264/api/Cidade?id=${cidadeToDelete}`
       );
 
-      if (response.data && response.data.sucesso) {
+      if (response.data) {
         toast.success("Cidade removida com sucesso!");
         onCidadeRemovida();
         setShowConfirmationModal(false);
       } else {
-        toast.error(response.data.mensagem);
+        toast.error(response.data);
       }
     } catch (error) {
       console.error("Erro ao remover cidade:", error);
-      toast.error("Erro ao remover cidade!");
+      toast.error(error.response.data);
     }
   };
 
@@ -95,9 +104,14 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
   };
 
   const handleEstadoChange = (e) => {
-    const value = e.target.value.toUpperCase();
-    if (value.length <= 2) {
-      setEditedCidade({ ...editedCidade, estado: value });
+    const estado = e.target.value.toUpperCase();
+
+    // Verificar se contém números ou espaços
+    const containsNumbers = /\d/.test(estado);
+    const containsSpaces = /\s/.test(estado);
+
+    if (estado.length <= 2 && !containsNumbers && !containsSpaces) {
+      setEditedCidade({ ...editedCidade, estado });
     }
   };
 
@@ -108,7 +122,8 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
   );
 
   return (
-    <div>
+    <div className="table-cidades">
+      <h4>Cidades Cadastradas</h4>
       <div className="search-bar">
         <Form className="search-form">
           <FormControl
@@ -193,7 +208,6 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
         </Table>
       </div>
 
-      {/* Modal de confirmação para exclusão */}
       <Modal show={showConfirmationModal} onHide={cancelDelete}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmar Exclusão</Modal.Title>

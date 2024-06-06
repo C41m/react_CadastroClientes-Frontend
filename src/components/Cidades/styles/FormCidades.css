@@ -2,25 +2,15 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+}
+.form-cidade input {
+  width: 100%;
 }
 
-.form-cidade-input {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-cidade-input label {
+.form-cidade label {
   font-weight: bold;
   margin-bottom: 0px;
-}
-
-.form-cidade-input input {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 100%;
 }
 
 .buttons-cidade {
@@ -28,28 +18,13 @@
   justify-content: start;
   gap: 10px;
 }
-
-.buttons-cidade button {
+.buttons-cidade Button {
   padding: 10px 20px;
   border-radius: 5px;
   border: none;
   cursor: pointer;
 }
 
-.form-estado-input {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-estado-input label {
-  font-weight: bold;
-  margin-bottom: 0px;
-}
-
-.form-estado-input input {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 10%;
+.container-form-cidade hr {
+  color: grey;
 }

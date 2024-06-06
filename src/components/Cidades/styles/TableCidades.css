@@ -1,45 +1,58 @@
-.table-container {
+.search-bar .search-form {
+  padding-bottom: 10px;
+}
+
+.table-cidades .table-container {
   max-height: 300px;
   overflow-y: auto;
 }
 
-.table {
+.table-cidades .table-container .table {
   width: 100%;
   border-collapse: collapse;
 }
+.table-cidades .table-container .table :hover {
+  background-color: #e0e0e0;
+}
 
-.table th,
-.table td {
+.table-cidades .table-container .table td {
   padding: 5px;
   border: 1px solid #ddd;
   text-align: start;
   vertical-align: middle;
+  transition: background-color 0.5s ease-in-out;
+}
+.table-cidades .table-container .table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  transition: background-color 0.5s ease-in-out;
 }
 
-.table .center-column {
+.table-cidades .table-container .table .center-column {
   text-align: center;
 }
 
-.table th {
+.table-cidades .table-container .table .center-column Button {
+  transition: background-color 0.5s ease-in-out;
+}
+
+.table-cidades .table-container .table .center-column Button:hover {
   background-color: #f0f0f0;
-  font-weight: bold;
 }
 
-.table tr:nth-child(odd) {
-  background-color: #f8f9fa;
+.table-cidades .table-container .table .center-column Button:active {
+  transition: background-color 0s ease-in-out;
+  border: none;
+  color: #808080;
 }
 
-.table :hover {
-  background-color: #e0e0e0;
-}
-
-.form-control {
+.table-cidades .table-container .form-control {
   width: 190px;
   border: 1px solid grey;
   height: 100%;
 }
 
-.form-control-cidade {
+.table-cidades .table-container .form-control-cidade {
   display: flex;
   width: 50px;
   text-align: center;
@@ -48,21 +61,21 @@
   height: 100%;
 }
 
-.search-form {
+.table-cidades .table-container .search-form {
   display: flex;
   flex-direction: column;
   padding: 20px 0;
   gap: 5px;
 }
 
-.search-form input {
+.table-cidades .table-container .search-form input {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 100%;
 }
 
-.search-form label {
+.table-cidades .table-container .search-form label {
   font-weight: bold;
   margin-bottom: 0px;
 }

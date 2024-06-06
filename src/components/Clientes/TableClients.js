@@ -2,9 +2,28 @@ import React, { useState } from "react";
 import { Table, Button, Modal } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
-const TableClients = ({ clientes, onEditarClick, onDeletarClick }) => {
+import FormCliente from "./FormCliente";
+
+const TableClients = ({ clientes, fetchData, onDeletarClick }) => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [clienteIdParaExcluir, setClienteIdParaExcluir] = useState(null);
+  const [modo, setModo] = useState("");
+  const [clienteParaEditar, setClienteParaEditar] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const setCloseModal = () => setShowModal(false);
+
+  // Editar cliente
+  const handleEditarClick = (cliente) => {
+    setModo("editar");
+    setClienteParaEditar(cliente);
+    setShowModal(true);
+  };
+
+  const handleClienteAdicionado = () => {
+    fetchData();
+    setShowModal(false);
+  };
 
   const handleShowModal = (clienteId) => {
     setClienteIdParaExcluir(clienteId);
@@ -31,14 +50,14 @@ const TableClients = ({ clientes, onEditarClick, onDeletarClick }) => {
             <th>ID</th>
             <th>Nome</th>
             <th>Sobrenome</th>
-            <th>Sexo</th>
+            <th className="center-column">Sexo</th>
             <th>Data de Nascimento</th>
-            <th>Idade</th>
+            <th className="center-column">Idade</th>
             <th>Cidade</th>
-            <th>Estado</th>
+            <th className="center-column">Estado</th>
             <th>Data de Criação</th>
             <th>Data de Alteração</th>
-            <th>Ações</th>
+            <th className="center-column">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -47,22 +66,27 @@ const TableClients = ({ clientes, onEditarClick, onDeletarClick }) => {
               <td>{cliente.id}</td>
               <td>{cliente.nome}</td>
               <td>{cliente.sobrenome}</td>
-              <td>{cliente.sexo}</td>
-              <td>{new Date(cliente.dataNascimento).toLocaleDateString()}</td>
-              <td>{cliente.idade}</td>
-              <td>{cliente.cidade}</td>
-              <td>{cliente.estado}</td>
+              <td className="center-column">{cliente.sexo}</td>
+              <td className="center-column">
+                {new Date(cliente.dataNascimento).toLocaleDateString()}
+              </td>
+              <td className="center-column">{cliente.idade}</td>
+              <td>{cliente.cidade.cidade}</td>
+              <td className="center-column">{cliente.cidade.estado}</td>
               <td>{new Date(cliente.dataCriacao).toLocaleString()}</td>
               <td>{new Date(cliente.dataAlteracao).toLocaleString()}</td>
-              <td>
+              <td className="center-column">
                 <Button
                   variant=""
-                  onClick={() => onEditarClick(cliente)}
+                  onClick={() => handleEditarClick(cliente)}
                   className="mr-2"
                 >
                   <FaEdit />
                 </Button>
-                <Button variant="" onClick={() => handleShowModal(cliente.id)}>
+                <Button
+                  variant="mr-2"
+                  onClick={() => handleShowModal(cliente.id)}
+                >
                   <FaTrash />
                 </Button>
               </td>
@@ -85,6 +109,14 @@ const TableClients = ({ clientes, onEditarClick, onDeletarClick }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <FormCliente
+        modo={modo}
+        clienteParaEditar={clienteParaEditar}
+        onClienteAdicionado={handleClienteAdicionado}
+        showModal={showModal}
+        onHide={setCloseModal}
+      />
     </>
   );
 };
