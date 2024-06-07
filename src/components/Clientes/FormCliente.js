@@ -22,7 +22,6 @@ const FormCliente = ({
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cidadeDesabilitada, setCidadeDesabilitada] = useState(true); // Novo estado para controlar se o campo de cidade deve estar desabilitado
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +55,6 @@ const FormCliente = ({
   const handleEstadoChange = async (selectedEstado) => {
     try {
       setEstado(selectedEstado);
-      setCidadeDesabilitada(true); // Desabilita o campo de cidade ao mudar o estado
 
       const responseCidades = await axios.get(
         `https://localhost:7264/api/Cidade/estado/${selectedEstado}`
