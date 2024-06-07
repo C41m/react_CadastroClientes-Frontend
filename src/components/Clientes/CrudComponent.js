@@ -11,7 +11,7 @@ import "./styles/CrudComponent.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const CrudComponent = () => {
-  const [clients, setClients] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [showModalClient, setShowModalClient] = useState(false);
   const [showModalCity, setShowModalCity] = useState(false);
   const [clientToEdit, setClientToEdit] = useState(null);
@@ -30,7 +30,7 @@ const CrudComponent = () => {
       const response = await axios.get(
         "https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente"
       );
-      setClients(response.data);
+      setClientes(response.data);
       setFiltered(false);
       setLoading(false);
     } catch (error) {
@@ -58,7 +58,7 @@ const CrudComponent = () => {
       const response = await axios.get(
         `https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente/FindByName?nome=${nome}&sobrenome=${sobrenome}`
       );
-      setClients(response.data);
+      setClientes(response.data);
       setFiltered(true);
     } catch (error) {
       // console.error("Erro ao buscar dados filtrados:", error);
@@ -155,7 +155,7 @@ const CrudComponent = () => {
         </Alert>
       )}
       <TableClients
-        clients={clients}
+        clientes={clientes}
         fetchData={fetchData}
         onDeleteClick={handleDeleteClick}
         loading={loading}
