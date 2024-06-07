@@ -8,7 +8,7 @@ import "./styles/FormCliente.css";
 
 const FormCliente = ({
   modo,
-  clienteParaEditar,
+  clientToEdit,
   onClienteAdicionado,
   showModal,
   onHide,
@@ -31,14 +31,14 @@ const FormCliente = ({
         );
         setEstados(responseEstados.data);
 
-        if (modo === "editar" && clienteParaEditar) {
-          setNome(clienteParaEditar.nome);
-          setSobrenome(clienteParaEditar.sobrenome);
-          setSexo(clienteParaEditar.sexo);
-          setDataNascimento(clienteParaEditar.dataNascimento);
-          setEstado(clienteParaEditar.cidade.estado);
-          handleEstadoChange(clienteParaEditar.cidade.estado);
-          setCidade(clienteParaEditar.cidade.id);
+        if (modo === "editar" && clientToEdit) {
+          setNome(clientToEdit.nome);
+          setSobrenome(clientToEdit.sobrenome);
+          setSexo(clientToEdit.sexo);
+          setDataNascimento(clientToEdit.dataNascimento);
+          setEstado(clientToEdit.cidade.estado);
+          handleEstadoChange(clientToEdit.cidade.estado);
+          setCidade(clientToEdit.cidade.id);
         }
 
         setLoading(false);
@@ -50,7 +50,7 @@ const FormCliente = ({
     if (showModal) {
       fetchData();
     }
-  }, [clienteParaEditar, modo, showModal]);
+  }, [clientToEdit, modo, showModal]);
 
   const handleEstadoChange = async (selectedEstado) => {
     try {
@@ -87,7 +87,7 @@ const FormCliente = ({
     e.preventDefault();
     try {
       const clientForm = {
-        id: clienteParaEditar?.id,
+        id: clientToEdit?.id,
         nome,
         sobrenome,
         sexo,
@@ -103,7 +103,7 @@ const FormCliente = ({
         );
         toast.success("Cliente adicionado com sucesso!");
         // console.log("Resposta do servidor:", response.data);
-      } else if (modo === "editar" && clienteParaEditar) {
+      } else if (modo === "editar" && clientToEdit) {
         await axios.put(
           `https://cadastroclientescaiofernando.azurewebsites.net/api/cliente/`,
           clientForm

@@ -7,7 +7,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/TableCidades.css";
 
-const TableCidades = ({ cidades, onEditedCity, onCityRemoved }) => {
+const TableCidades = ({ cidades, onCityEdited, onCityRemoved }) => {
   const [editMode, setEditMode] = useState(null);
   const [editedCity, setEditedCity] = useState({
     id: null,
@@ -54,7 +54,7 @@ const TableCidades = ({ cidades, onEditedCity, onCityRemoved }) => {
 
       if (response.data) {
         toast.success("Cidade editada com sucesso!");
-        onEditedCity();
+        onCityEdited();
         setEditMode(null);
       } else {
         toast.error(response.data);
