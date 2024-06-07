@@ -1,70 +1,57 @@
-# Getting Started with Create React App
+# Cadastro Clientes v1
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Projeto realizado com as tecnologias .Net 8.0 Core (ASP.NET Core, Entity Framework Core e Swagger) para desenvolvimento da API e React JS (Typescript, HTML, CSS e Bootstrap) para o front-end. Para banco de dados, usei SQL Server com tabelas devidamente relacionadas e a arquitetura de desenvolvimento é MVC.
 
-## Available Scripts
+A comunicação entre o back-end e o front-end é feita através de requisições HTTP, utilizando o protocolo RESTful para a troca de dados.
 
-In the project directory, you can run:
+## Funcionalidades
 
-### `npm start`
+### Cidades
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### 1. Cadastro
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    1. Inserir dados em todo formulário. Todos os campos são **obrigatórios**.
+    2. Não pode existir a mesma cidade em determinado estado.
 
-### `npm test`
+#### 2. Busca por nome de cidade ou estado
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    1. Os dados são capturados da API quando o modal abre e se acontecer alguma alteração dentro dele, como adição, alteração ou exclusão.
+    2. Como os dados aqui já são previamente capturados, essa busca em específico, procura por registros dentro da lista salva.
+    3. O campo é dinâmico e busca as letras digitadas.
 
-### `npm run build`
+#### 3. Exclusão
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    1. Para excluir, basta clicar no ícone de lixeira do lado do registro e confirmar no modal.
+    2. Não é permitido a exclusão de cidades que estejam já vinculados com algum cliente.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### 4. Edição
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    1. Para editar, basta clicar no ícone de papel e caneta ao lado do registro e adicionar os novos dados. Após isso, clicar no ícone do disquete ao lado. Caso desejar cancelar durante a edição, só apertar no x.
+    2. **Importante**: Quando uma cidade vinculada a um cliente é alterada, a cidade registrada para esse cliente também será afetada.
 
-### `npm run eject`
+### Clientes
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### 1. Cadastro de clientes
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    1. Inserir dados em todo formulário. Todos os campos são **obrigatórios**.
+    2. Os dados de ESTADO e CIDADE são ligados diretamente ao banco de dados, ou seja, é **fundamental** o cadastro destes antes.
+    3. O formulário não trata dados de pessoas repetidas (por enquanto).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### 2. Busca por nome e sobrenome
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    1. Ao contrário do que acontece na no *modal de cidades*, a metodologia usada aqui foi diferente. Qualquer registro nos campos, seja ele no nome ou sobrenome vai ser diretamente buscado via API ao apertar em "Pesquisar".
+    2. Não é preciso do nome completo, uma parte ou uma letra deste já é possível realizar buscas e retornar uma lista de resultados, senão obtiver nenhuma semelhança, sistema avisará via notificação.
+    3. Enquanto os dados estiverem filtrados, um aviso permacerá na tela acima da tabela.
+    4. Para voltar, basta apertar em "Limpar".
 
-## Learn More
+#### 3. Exclusão
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    1. Para excluir, basta clicar no ícone de lixeira do lado do registro e confirmar no modal.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### 4. Edição
 
-### Code Splitting
+    1. Para editar, basta clicar no ícone de papel e caneta ao lado do cliente e o formulário com os dados para edição aparece para alteração.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Geral
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    1. Pode ser feito a ordenação da tabela principal clicando no cabeçalho da coluna desejada.
