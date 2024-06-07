@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Button, Form, Alert } from "react-bootstrap";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 import TableClients from "./TableClients";
 import FormCliente from "./FormCliente";
 import ModalFormCidade from "../Cidades/ModalFormCidade";
-import "./styles/CrudComponent.css";
 
+import "./styles/CrudComponent.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const CrudComponent = () => {
   const [clientes, setClientes] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showModalCliente, setShowModalCliente] = useState(false);
+  const [showModalCidade, setShowModalCidade] = useState(false);
   const [clienteParaEditar, setClienteParaEditar] = useState(null);
   const [modo, setModo] = useState("adicionar");
   const [nome, setNome] = useState("");
@@ -30,15 +32,17 @@ const CrudComponent = () => {
       setFiltrado(false);
       setLoading(false);
     } catch (error) {
-      console.error("Erro ao buscar dados:", error);
+      // console.error("Erro ao buscar dados:", error);
+      toast.error(error.response.data);
     }
   };
 
-  const setCloseModal = () => setShowModal(false);
+  const setCloseModalCliente = () => setShowModalCliente(false);
+  const setCloseModalCidade = () => setShowModalCidade(false);
 
   const handleClienteAdicionado = () => {
     fetchData();
-    setShowModal(false);
+    setShowModalCliente(false);
   };
 
   const filterData = async () => {
@@ -55,7 +59,8 @@ const CrudComponent = () => {
       setClientes(response.data);
       setFiltrado(true);
     } catch (error) {
-      console.error("Erro ao buscar dados filtrados:", error);
+      // console.error("Erro ao buscar dados filtrados:", error);
+      toast.error(error.response.data);
     }
   };
 
@@ -65,15 +70,14 @@ const CrudComponent = () => {
     fetchData();
   };
 
-  const handleCidadeAdicionada = () => {
-    // Você pode adicionar lógica para atualizar a lista de cidades se necessário
-    console.log("Cidade adicionada com sucesso");
-  };
-
-  const handleAdicionarClick = () => {
+  const handleAdicionarClienteClick = () => {
     setModo("adicionar");
     setClienteParaEditar(null);
-    setShowModal(true);
+    setShowModalCliente(true);
+  };
+
+  const handleAdicionarCidadeClick = () => {
+    setShowModalCidade(true);
   };
 
   const handleDeleteClick = async (clienteId) => {
@@ -81,7 +85,8 @@ const CrudComponent = () => {
       await axios.delete(`https://localhost:7264/api/Cliente?id=${clienteId}`);
       fetchData(); // Atualiza a lista de clientes após deletar
     } catch (error) {
-      console.error("Erro ao deletar cliente:", error);
+      // console.log("Erro ao deletar cliente:", error);
+      toast.error(error.response.data);
     }
   };
 
@@ -94,18 +99,30 @@ const CrudComponent = () => {
   };
 
   return (
-    <div>
-      <h1>MeusClientes</h1>
-      <Button variant="primary" onClick={handleAdicionarClick}>
-        Adicionar Novo Cliente
-      </Button>
+    <div className="crud-container">
+      <div className="title-container">
+        <h1 className="first-title">Meus</h1>
+        <h1 className="second-title">Clientes</h1>
+      </div>
 
-      <ModalFormCidade onCidadeAdicionada={handleCidadeAdicionada} />
+      <div className="buttons-container">
+        <Button variant="primary" onClick={handleAdicionarClienteClick}>
+          Adicionar Novo Cliente
+        </Button>
+        <Button variant="primary" onClick={handleAdicionarCidadeClick}>
+          Adicionar Nova Cidade
+        </Button>
+
+        <ModalFormCidade
+          showModal={showModalCidade}
+          onHide={setCloseModalCidade}
+        />
+      </div>
+
       <div className="container-search">
         <h2>Pesquisa</h2>
-        <Form className="search-name">
+        <Form className="search-inputs">
           <Form.Group controlId="formNome">
-            <Form.Label>Nome</Form.Label>
             <Form.Control
               type="text"
               placeholder="Digite o nome"
@@ -114,7 +131,6 @@ const CrudComponent = () => {
             />
           </Form.Group>
           <Form.Group controlId="formSobrenome">
-            <Form.Label>Sobrenome</Form.Label>
             <Form.Control
               type="text"
               placeholder="Digite o sobrenome"
@@ -122,14 +138,12 @@ const CrudComponent = () => {
               onChange={handleSobrenomeChange}
             />
           </Form.Group>
+
           <Button variant="primary" onClick={filterData}>
             Pesquisar
           </Button>
-          <Button
-            variant="secondary"
-            onClick={clearFilters}
-            style={{ marginLeft: "10px" }}
-          >
+
+          <Button variant="secondary" onClick={clearFilters}>
             Limpar
           </Button>
         </Form>
@@ -139,20 +153,18 @@ const CrudComponent = () => {
           Dados filtrados!
         </Alert>
       )}
-
       <TableClients
         clientes={clientes}
         fetchData={fetchData}
         onDeletarClick={handleDeleteClick}
         loading={loading}
       />
-
       <FormCliente
         modo={modo}
         clienteParaEditar={clienteParaEditar}
         onClienteAdicionado={handleClienteAdicionado}
-        showModal={showModal}
-        onHide={setCloseModal}
+        showModal={showModalCliente}
+        onHide={setCloseModalCliente}
       />
     </div>
   );

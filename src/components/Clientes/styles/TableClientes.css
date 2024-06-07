@@ -1,18 +1,40 @@
-.table {
-  margin-top: 20px;
+.table-clientes .table-container .table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.filter-panel {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+.table-clientes .table-container .table :hover {
+  background-color: #e0e0e0;
 }
 
-.filter-panel .form-group {
-  flex: 1;
-  margin-right: 10px;
+.table-clientes .table-container .table td {
+  padding: 5px;
+  border: 1px solid #ddd;
+  text-align: start;
+  vertical-align: middle;
+  transition: background-color 0.5s ease-in-out;
 }
 
-.filter-panel .form-group:last-child {
-  margin-right: 0;
+.table-clientes .table-container .table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  transition: background-color 0.5s ease-in-out;
+}
+
+.table-clientes .table-container .table .center-column {
+  text-align: center;
+}
+
+.table-clientes .table-container .table .center-column Button {
+  transition: background-color 0.5s ease-in-out;
+}
+
+.table-clientes .table-container .table .center-column Button:hover {
+  background-color: #f0f0f0;
+}
+
+.table-clientes .table-container .table .center-column Button:active {
+  transition: background-color 0s ease-in-out;
+  border: none;
+  color: #808080;
 }

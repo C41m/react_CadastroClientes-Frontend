@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
+import axios from "axios";
+
 import "./styles/FormCidades.css";
 
-const FormCidades = ({ onCidadeAdicionada, handleCloseModal }) => {
+const FormCidades = ({ onCidadeAdicionada, onHide }) => {
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
 
@@ -31,7 +32,7 @@ const FormCidades = ({ onCidadeAdicionada, handleCloseModal }) => {
       onCidadeAdicionada();
     } catch (errors) {
       // console.log(errors.response.data.errors.Estado);
-      toast.error(errors.response.data.errors.Estado[0]);
+      toast.error(errors.response.data);
     }
   };
 
@@ -55,7 +56,7 @@ const FormCidades = ({ onCidadeAdicionada, handleCloseModal }) => {
     <Form
       className="container-form-cidade"
       onSubmit={handleSubmit}
-      onAbort={handleCloseModal}
+      onAbort={onHide}
     >
       <div className="form-cidade">
         <Form.Group bsPrefix controlId="formCidade">
@@ -83,7 +84,8 @@ const FormCidades = ({ onCidadeAdicionada, handleCloseModal }) => {
         <Button variant="primary" type="submit">
           Adicionar
         </Button>
-        <Button variant="danger" onClick={handleCloseModal}>
+
+        <Button variant="danger" onClick={onHide}>
           Voltar
         </Button>
       </div>

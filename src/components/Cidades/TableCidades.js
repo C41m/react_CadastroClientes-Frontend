@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Table, Button, FormControl, Modal, Form } from "react-bootstrap";
 import { FaEdit, FaTrash, FaSave, FaTimes } from "react-icons/fa";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axios from "axios";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/TableCidades.css";
 

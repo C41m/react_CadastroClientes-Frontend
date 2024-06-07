@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Form, Button, Spinner, Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
+import axios from "axios";
+
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles/FormCliente.css"; // Importa o arquivo CSS
+import "./styles/FormCliente.css";
 
 const FormCliente = ({
   modo,
@@ -58,7 +60,8 @@ const FormCliente = ({
       setCidades(responseCidades.data);
       setLoading(false);
     } catch (error) {
-      console.error("Erro ao buscar cidades:", error);
+      // console.error("Erro ao buscar cidades:", error);
+      toast.error(error.response.data);
     }
   };
 
@@ -69,6 +72,7 @@ const FormCliente = ({
       setNome(value.toUpperCase());
     }
   };
+
   // Validação Sobrenome
   const handleSobrenomeChange = (e) => {
     const value = e.target.value;
@@ -91,30 +95,31 @@ const FormCliente = ({
       };
 
       if (modo === "adicionar") {
-        const response = await axios.post(
-          "https://localhost:7264/api/cliente",
-          clientForm
-        );
-        console.log("Resposta do servidor:", response.data);
+        await axios.post("https://localhost:7264/api/cliente", clientForm);
+        toast.success("Cliente adicionado com sucesso!");
+        // console.log("Resposta do servidor:", response.data);
       } else if (modo === "editar" && clienteParaEditar) {
-        const response = await axios.put(
-          `https://localhost:7264/api/cliente/`,
-          clientForm
-        );
-        console.log("Resposta do servidor:", response.data);
+        await axios.put(`https://localhost:7264/api/cliente/`, clientForm);
+        toast.success("Cliente atualizado com sucesso!");
+
+        // console.log("Resposta do servidor:", response.data);
       }
 
-      setNome("");
-      setSobrenome("");
-      setSexo("");
-      setDataNascimento("");
-      setEstado("");
-      setCidade("");
+      handleCleanForm();
 
       onClienteAdicionado();
     } catch (error) {
-      console.error("Erro ao adicionar/editar cliente:", error);
+      // console.error("Erro ao adicionar/editar cliente:", error);
     }
+  };
+
+  const handleCleanForm = () => {
+    setNome("");
+    setSobrenome("");
+    setSexo("");
+    setDataNascimento("");
+    setEstado("");
+    setCidade("");
   };
 
   return (
@@ -221,17 +226,32 @@ const FormCliente = ({
                 required
               >
                 <option value="">Selecione</option>
-                {cidades.map((cidadeItem, index) => (
+                {cidades.map((cidadeItem) => (
                   <option key={cidadeItem.id} value={cidadeItem.id}>
                     {cidadeItem.cidade}
                   </option>
                 ))}
               </Form.Control>
             </Form.Group>
+            <div className="buttons-container">
+              <Button variant="primary" type="submit" className="btn">
+                {modo === "adicionar"
+                  ? "Adicionar Cliente"
+                  : "Salvar Alterações"}
+              </Button>
 
-            <Button variant="primary" type="submit" className="btn-primary">
-              {modo === "adicionar" ? "Adicionar Cliente" : "Salvar Alterações"}
-            </Button>
+              <Button
+                variant="secondary"
+                className="btn"
+                onClick={handleCleanForm}
+              >
+                Limpar
+              </Button>
+
+              <Button variant="danger" className="btn" onClick={onHide}>
+                Cancelar
+              </Button>
+            </div>
           </Form>
         )}
       </Modal.Body>

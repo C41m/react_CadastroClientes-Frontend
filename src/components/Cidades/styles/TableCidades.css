@@ -11,6 +11,7 @@
   width: 100%;
   border-collapse: collapse;
 }
+
 .table-cidades .table-container .table :hover {
   background-color: #e0e0e0;
 }
@@ -22,6 +23,7 @@
   vertical-align: middle;
   transition: background-color 0.5s ease-in-out;
 }
+
 .table-cidades .table-container .table th {
   background-color: #f0f0f0;
   font-weight: bold;

@@ -1,3 +1,30 @@
+.crud-container {
+  margin-top: 30px;
+}
+
+.crud-container .title-container {
+  display: flex;
+  justify-content: center;
+  transition: transform 1s ease-in-out;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.crud-container .title-container:hover {
+  transform: scale(1.05);
+}
+
+.crud-container .title-container .first-title {
+  color: blue;
+}
+
+.crud-container .buttons-container {
+  display: flex;
+  gap: 15px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
 .container-search {
   display: flex;
   flex-direction: column;
@@ -5,10 +32,11 @@
   padding: 15px 0;
 }
 
-.container-search .search-name {
+.container-search .search-inputs {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: end;
   margin: auto;
+  gap: 15px;
 }

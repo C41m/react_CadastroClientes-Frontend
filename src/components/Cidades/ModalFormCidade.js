@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap";
-import FormCidades from "./FormCidades";
-import TableCidades from "./TableCidades";
-import axios from "axios";
+import { Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
+import axios from "axios";
+
 import "react-toastify/dist/ReactToastify.css";
 
-const ModalFormCidade = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [cidades, setCidades] = useState([]);
+import FormCidades from "./FormCidades";
+import TableCidades from "./TableCidades";
 
-  const handleCloseModal = () => setShowModal(false);
-  const handleShowModal = () => setShowModal(true);
+const ModalFormCidade = ({ showModal, onHide }) => {
+  const [cidades, setCidades] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -41,19 +39,16 @@ const ModalFormCidade = () => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShowModal}>
-        Adicionar Nova Cidade
-      </Button>
-
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={onHide}>
         <Modal.Header closeButton>
           <Modal.Title>Adicionar Nova Cidade</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormCidades
             onCidadeAdicionada={handleCidadeAdicionada}
-            handleCloseModal={handleCloseModal}
+            onHide={onHide}
           />
+
           <TableCidades
             cidades={cidades}
             onCidadeEditada={handleCidadeEditada}
