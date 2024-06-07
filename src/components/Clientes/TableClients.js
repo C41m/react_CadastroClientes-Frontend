@@ -6,7 +6,7 @@ import FormCliente from "./FormCliente";
 import "./styles/TableClientes.css";
 import { toast } from "react-toastify";
 
-const TableClients = ({ clientes, fetchData, onDelteClick, loading }) => {
+const TableClients = ({ clientes, fetchData, onDeleteClick, loading }) => {
   const [sortedClients, setSortedClients] = useState(clientes);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [clientIdToDelete, setClientIdToDelete] = useState(null);
@@ -49,7 +49,7 @@ const TableClients = ({ clientes, fetchData, onDelteClick, loading }) => {
 
   const handleConfirmDelete = () => {
     if (clientIdToDelete !== null) {
-      onDelteClick(clientIdToDelete);
+      onDeleteClick(clientIdToDelete);
       handleCloseModal();
       toast.success("Cliente exlcuido!");
     }
