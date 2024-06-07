@@ -85,7 +85,7 @@ const CrudComponent = () => {
   const handleDeleteClick = async (clienteId) => {
     try {
       await axios.delete(
-        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente?id=${clienteId}`
+        `https://cadastroclientescaiofernando.azurewebsites.net/clientes/${clienteId}`
       );
       fetchData();
     } catch (error) {

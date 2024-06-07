@@ -28,7 +28,7 @@ const FilterPanel = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://cadastroclientescaiofernando.azurewebsites.net/api/clients"
+          "https://cadastroclientescaiofernando.azurewebsites.net/clientes"
         );
         setClients(response.data);
         setFilteredClientes(response.data);
