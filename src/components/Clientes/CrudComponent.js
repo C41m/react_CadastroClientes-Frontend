@@ -27,7 +27,9 @@ const CrudComponent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://localhost:7264/api/Cliente");
+      const response = await axios.get(
+        "https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente"
+      );
       setClientes(response.data);
       setFiltrado(false);
       setLoading(false);
@@ -54,7 +56,7 @@ const CrudComponent = () => {
 
     try {
       const response = await axios.get(
-        `https://localhost:7264/api/Cliente/FindByName?nome=${nome}&sobrenome=${sobrenome}`
+        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente/FindByName?nome=${nome}&sobrenome=${sobrenome}`
       );
       setClientes(response.data);
       setFiltrado(true);
@@ -82,7 +84,9 @@ const CrudComponent = () => {
 
   const handleDeleteClick = async (clienteId) => {
     try {
-      await axios.delete(`https://localhost:7264/api/Cliente?id=${clienteId}`);
+      await axios.delete(
+        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente?id=${clienteId}`
+      );
       fetchData(); // Atualiza a lista de clientes após deletar
     } catch (error) {
       // console.log("Erro ao deletar cliente:", error);

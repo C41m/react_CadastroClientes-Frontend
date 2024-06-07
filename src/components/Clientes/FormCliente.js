@@ -27,7 +27,7 @@ const FormCliente = ({
     const fetchData = async () => {
       try {
         const responseEstados = await axios.get(
-          "https://localhost:7264/api/cidade"
+          "https://cadastroclientescaiofernando.azurewebsites.net/api/cidade"
         );
         setEstados(responseEstados.data);
 
@@ -57,7 +57,7 @@ const FormCliente = ({
       setEstado(selectedEstado);
 
       const responseCidades = await axios.get(
-        `https://localhost:7264/api/Cidade/estado/${selectedEstado}`
+        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade/estado/${selectedEstado}`
       );
       setCidades(responseCidades.data);
       setLoading(false);
@@ -97,11 +97,17 @@ const FormCliente = ({
       };
 
       if (modo === "adicionar") {
-        await axios.post("https://localhost:7264/api/cliente", clientForm);
+        await axios.post(
+          "https://cadastroclientescaiofernando.azurewebsites.net/api/cliente",
+          clientForm
+        );
         toast.success("Cliente adicionado com sucesso!");
         // console.log("Resposta do servidor:", response.data);
       } else if (modo === "editar" && clienteParaEditar) {
-        await axios.put(`https://localhost:7264/api/cliente/`, clientForm);
+        await axios.put(
+          `https://cadastroclientescaiofernando.azurewebsites.net/api/cliente/`,
+          clientForm
+        );
         toast.success("Cliente atualizado com sucesso!");
 
         // console.log("Resposta do servidor:", response.data);

@@ -17,7 +17,9 @@ const ModalFormCidade = ({ showModal, onHide }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://localhost:7264/api/cidade");
+      const response = await axios.get(
+        "https://cadastroclientescaiofernando.azurewebsites.net/api/cidade"
+      );
       setCidades(response.data);
     } catch (error) {
       // console.error(error.response.data);

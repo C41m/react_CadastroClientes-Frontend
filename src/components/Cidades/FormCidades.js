@@ -23,7 +23,10 @@ const FormCidades = ({ onCidadeAdicionada, onHide }) => {
         return;
       }
 
-      await axios.post("https://localhost:7264/api/Cidade", novaCidade);
+      await axios.post(
+        "https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade",
+        novaCidade
+      );
 
       setCidade("");
       setEstado("");

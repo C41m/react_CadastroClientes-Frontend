@@ -27,7 +27,9 @@ const FilterPanel = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("api/clientes");
+        const response = await axios.get(
+          "https://cadastroclientescaiofernando.azurewebsites.net/api/clientes"
+        );
         setClientes(response.data);
         setFilteredClientes(response.data);
       } catch (error) {

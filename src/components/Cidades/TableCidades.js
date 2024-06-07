@@ -43,11 +43,14 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
         return;
       }
 
-      const response = await axios.put(`https://localhost:7264/api/Cidade/`, {
-        ...editedCidade,
-        cidade: editedCidade.cidade.toUpperCase(),
-        estado: editedCidade.estado.toUpperCase(),
-      });
+      const response = await axios.put(
+        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade/`,
+        {
+          ...editedCidade,
+          cidade: editedCidade.cidade.toUpperCase(),
+          estado: editedCidade.estado.toUpperCase(),
+        }
+      );
 
       if (response.data) {
         toast.success("Cidade editada com sucesso!");
@@ -70,7 +73,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
   const confirmDelete = async () => {
     try {
       const response = await axios.delete(
-        `https://localhost:7264/api/Cidade?id=${cidadeToDelete}`
+        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade?id=${cidadeToDelete}`
       );
 
       if (response.data) {
