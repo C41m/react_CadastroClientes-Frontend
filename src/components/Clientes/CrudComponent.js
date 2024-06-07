@@ -32,8 +32,8 @@ const CrudComponent = () => {
       setFiltrado(false);
       setLoading(false);
     } catch (error) {
-      // console.error("Erro ao buscar dados:", error);
-      toast.error(error.response.data);
+      // console.error(error.data.response);
+      toast.error(error.data.response);
     }
   };
 

@@ -29,6 +29,7 @@ const FormCidades = ({ onCidadeAdicionada, onHide }) => {
       setEstado("");
 
       toast.success("Cidade adicionada com sucesso!");
+
       onCidadeAdicionada();
     } catch (errors) {
       // console.log(errors.response.data.errors.Estado);
@@ -59,7 +60,7 @@ const FormCidades = ({ onCidadeAdicionada, onHide }) => {
       onAbort={onHide}
     >
       <div className="form-cidade">
-        <Form.Group bsPrefix controlId="formCidade">
+        <Form.Group controlId="formCidade">
           <Form.Label>Cidade:</Form.Label>
           <Form.Control
             type="text"
@@ -69,7 +70,7 @@ const FormCidades = ({ onCidadeAdicionada, onHide }) => {
           />
         </Form.Group>
 
-        <Form.Group bsPrefix controlId="formEstado">
+        <Form.Group controlId="formEstado">
           <Form.Label>Estado (UF):</Form.Label>
           <Form.Control
             type="text"
@@ -80,7 +81,7 @@ const FormCidades = ({ onCidadeAdicionada, onHide }) => {
         </Form.Group>
       </div>
 
-      <div bsPrefix className="buttons-cidade">
+      <div className="buttons-cidade">
         <Button variant="primary" type="submit">
           Adicionar
         </Button>

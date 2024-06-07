@@ -22,6 +22,7 @@ const FormCliente = ({
   const [estados, setEstados] = useState([]);
   const [cidades, setCidades] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cidadeDesabilitada, setCidadeDesabilitada] = useState(true); // Novo estado para controlar se o campo de cidade deve estar desabilitado
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +30,6 @@ const FormCliente = ({
         const responseEstados = await axios.get(
           "https://localhost:7264/api/cidade"
         );
-        console.log("Chamada");
         setEstados(responseEstados.data);
 
         if (modo === "editar" && clienteParaEditar) {
@@ -37,23 +37,27 @@ const FormCliente = ({
           setSobrenome(clienteParaEditar.sobrenome);
           setSexo(clienteParaEditar.sexo);
           setDataNascimento(clienteParaEditar.dataNascimento);
-          setEstado(clienteParaEditar.cidade.estado); // Agora estamos usando diretamente clienteParaEditar.estado
+          setEstado(clienteParaEditar.cidade.estado);
           handleEstadoChange(clienteParaEditar.cidade.estado);
-          setCidade(clienteParaEditar.cidade.id); // Definir o estado cidade com a cidade do clienteParaEditar
+          setCidade(clienteParaEditar.cidade.id);
         }
 
         setLoading(false);
       } catch (error) {
-        // console.error("Erro ao buscar dados:", error);
+        toast.error(error.response.data);
       }
     };
 
-    fetchData();
-  }, [clienteParaEditar, modo]);
+    if (showModal) {
+      fetchData();
+    }
+  }, [clienteParaEditar, modo, showModal]);
 
   const handleEstadoChange = async (selectedEstado) => {
     try {
       setEstado(selectedEstado);
+      setCidadeDesabilitada(true); // Desabilita o campo de cidade ao mudar o estado
+
       const responseCidades = await axios.get(
         `https://localhost:7264/api/Cidade/estado/${selectedEstado}`
       );

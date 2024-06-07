@@ -57,7 +57,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
         toast.error(response.data);
       }
     } catch (error) {
-      console.error("Erro ao editar cidade:", error);
+      // console.error("Erro ao editar cidade:", error);
       toast.error(error.response.data);
     }
   };
@@ -81,7 +81,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
         toast.error(response.data);
       }
     } catch (error) {
-      console.error("Erro ao remover cidade:", error);
+      // console.error("Erro ao remover cidade:", error);
       toast.error(error.response.data);
     }
   };
@@ -209,21 +209,24 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
           </tbody>
         </Table>
       </div>
-
-      <Modal show={showConfirmationModal} onHide={cancelDelete}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmar Exclusão</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Tem certeza que deseja excluir esta cidade?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={confirmDelete}>
-            Excluir
-          </Button>
-          <Button variant="secondary" onClick={cancelDelete}>
-            Cancelar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {cidades.length === 0 ? (
+        <h4>Nenhuma cidade cadastrada.</h4>
+      ) : (
+        <Modal show={showConfirmationModal} onHide={cancelDelete}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmar Exclusão</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Tem certeza que deseja excluir esta cidade?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={confirmDelete}>
+              Excluir
+            </Button>
+            <Button variant="secondary" onClick={cancelDelete}>
+              Cancelar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 };
