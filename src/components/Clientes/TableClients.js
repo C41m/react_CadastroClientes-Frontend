@@ -138,7 +138,7 @@ const TableClients = ({ clientes, fetchData, onDelteClick, loading }) => {
                 </tr>
               </thead>
               <tbody>
-                {sortedClients.reverse().map((cliente) => (
+                {sortedClients.map((cliente) => (
                   <tr key={cliente.id}>
                     <td>{cliente.id}</td>
                     <td>{cliente.nome}</td>
