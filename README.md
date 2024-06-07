@@ -4,6 +4,8 @@ Projeto realizado com as tecnologias .Net 8.0 Core (ASP.NET Core, Entity Framewo
 
 A comunicação entre o back-end e o front-end é feita através de requisições HTTP, utilizando o protocolo RESTful para a troca de dados.
 
+Link do repositório do backend: [C41m/dotnet_CadastroClientes-Backend (github.com)](https://github.com/C41m/dotnet_CadastroClientes-Backend)
+
 ## Funcionalidades
 
 ### Cidades
