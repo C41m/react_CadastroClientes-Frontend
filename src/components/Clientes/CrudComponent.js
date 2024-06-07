@@ -11,14 +11,14 @@ import "./styles/CrudComponent.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const CrudComponent = () => {
-  const [clientes, setClientes] = useState([]);
-  const [showModalCliente, setShowModalCliente] = useState(false);
-  const [showModalCidade, setShowModalCidade] = useState(false);
-  const [clienteParaEditar, setClienteParaEditar] = useState(null);
+  const [clients, setClients] = useState([]);
+  const [showModalClient, setShowModalClient] = useState(false);
+  const [showModalCity, setShowModalCity] = useState(false);
+  const [clientToEdit, setClientToEdit] = useState(null);
   const [modo, setModo] = useState("adicionar");
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
-  const [filtrado, setFiltrado] = useState(false);
+  const [filtered, setFiltered] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,8 +30,8 @@ const CrudComponent = () => {
       const response = await axios.get(
         "https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente"
       );
-      setClientes(response.data);
-      setFiltrado(false);
+      setClients(response.data);
+      setFiltered(false);
       setLoading(false);
     } catch (error) {
       // console.error(error.data.response);
@@ -39,17 +39,17 @@ const CrudComponent = () => {
     }
   };
 
-  const setCloseModalCliente = () => setShowModalCliente(false);
-  const setCloseModalCidade = () => setShowModalCidade(false);
+  const setCloseModalClient = () => setShowModalClient(false);
+  const setCloseModalCity = () => setShowModalCity(false);
 
-  const handleClienteAdicionado = () => {
+  const handleClientAdded = () => {
     fetchData();
-    setShowModalCliente(false);
+    setShowModalClient(false);
   };
 
   const filterData = async () => {
     if (!nome && !sobrenome) {
-      setFiltrado(false);
+      setFiltered(false);
       fetchData();
       return;
     }
@@ -58,8 +58,8 @@ const CrudComponent = () => {
       const response = await axios.get(
         `https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente/FindByName?nome=${nome}&sobrenome=${sobrenome}`
       );
-      setClientes(response.data);
-      setFiltrado(true);
+      setClients(response.data);
+      setFiltered(true);
     } catch (error) {
       // console.error("Erro ao buscar dados filtrados:", error);
       toast.error(error.response.data);
@@ -72,14 +72,14 @@ const CrudComponent = () => {
     fetchData();
   };
 
-  const handleAdicionarClienteClick = () => {
+  const handleClientAddClick = () => {
     setModo("adicionar");
-    setClienteParaEditar(null);
-    setShowModalCliente(true);
+    setClientToEdit(null);
+    setShowModalClient(true);
   };
 
-  const handleAdicionarCidadeClick = () => {
-    setShowModalCidade(true);
+  const handleCityAddClick = () => {
+    setShowModalCity(true);
   };
 
   const handleDeleteClick = async (clienteId) => {
@@ -87,14 +87,14 @@ const CrudComponent = () => {
       await axios.delete(
         `https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente?id=${clienteId}`
       );
-      fetchData(); // Atualiza a lista de clientes após deletar
+      fetchData();
     } catch (error) {
       // console.log("Erro ao deletar cliente:", error);
       toast.error(error.response.data);
     }
   };
 
-  const handleNomeChange = (e) => {
+  const handleNameChange = (e) => {
     setNome(e.target.value.toUpperCase());
   };
 
@@ -110,17 +110,14 @@ const CrudComponent = () => {
       </div>
 
       <div className="buttons-container">
-        <Button variant="primary" onClick={handleAdicionarClienteClick}>
+        <Button variant="primary" onClick={handleClientAddClick}>
           Adicionar Novo Cliente
         </Button>
-        <Button variant="primary" onClick={handleAdicionarCidadeClick}>
+        <Button variant="primary" onClick={handleCityAddClick}>
           Adicionar Nova Cidade
         </Button>
 
-        <ModalFormCidade
-          showModal={showModalCidade}
-          onHide={setCloseModalCidade}
-        />
+        <ModalFormCidade showModal={showModalCity} onHide={setCloseModalCity} />
       </div>
 
       <div className="container-search">
@@ -131,7 +128,7 @@ const CrudComponent = () => {
               type="text"
               placeholder="Digite o nome"
               value={nome}
-              onChange={handleNomeChange}
+              onChange={handleNameChange}
             />
           </Form.Group>
           <Form.Group controlId="formSobrenome">
@@ -152,23 +149,23 @@ const CrudComponent = () => {
           </Button>
         </Form>
       </div>
-      {filtrado && (
+      {filtered && (
         <Alert variant="info" style={{ marginTop: "10px" }}>
           Dados filtrados!
         </Alert>
       )}
       <TableClients
-        clientes={clientes}
+        clients={clients}
         fetchData={fetchData}
-        onDeletarClick={handleDeleteClick}
+        onDeleteClick={handleDeleteClick}
         loading={loading}
       />
       <FormCliente
         modo={modo}
-        clienteParaEditar={clienteParaEditar}
-        onClienteAdicionado={handleClienteAdicionado}
-        showModal={showModalCliente}
-        onHide={setCloseModalCliente}
+        clientToEdit={clientToEdit}
+        onClienteAdicionado={handleClientAdded}
+        showModal={showModalClient}
+        onHide={setCloseModalClient}
       />
     </div>
   );

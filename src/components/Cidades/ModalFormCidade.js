@@ -27,15 +27,15 @@ const ModalFormCidade = ({ showModal, onHide }) => {
     }
   };
 
-  const handleCidadeAdicionada = () => {
+  const handleCityAdded = () => {
     fetchData();
   };
 
-  const handleCidadeEditada = () => {
+  const handleCityEdited = () => {
     fetchData();
   };
 
-  const handleCidadeRemovida = () => {
+  const handleCityDeleted = () => {
     fetchData();
   };
 
@@ -46,15 +46,12 @@ const ModalFormCidade = ({ showModal, onHide }) => {
           <Modal.Title>Adicionar Nova Cidade</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormCidades
-            onCidadeAdicionada={handleCidadeAdicionada}
-            onHide={onHide}
-          />
+          <FormCidades onAddedCity={handleCityAdded} onHide={onHide} />
 
           <TableCidades
             cidades={cidades}
-            onCidadeEditada={handleCidadeEditada}
-            onCidadeRemovida={handleCidadeRemovida}
+            onCityEdited={handleCityEdited}
+            onCityRemoved={handleCityDeleted}
           />
         </Modal.Body>
       </Modal>

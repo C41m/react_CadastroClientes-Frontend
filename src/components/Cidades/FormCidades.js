@@ -5,7 +5,7 @@ import axios from "axios";
 
 import "./styles/FormCidades.css";
 
-const FormCidades = ({ onCidadeAdicionada, onHide }) => {
+const FormCidades = ({ onAddedCity, onHide }) => {
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
 
@@ -33,7 +33,7 @@ const FormCidades = ({ onCidadeAdicionada, onHide }) => {
 
       toast.success("Cidade adicionada com sucesso!");
 
-      onCidadeAdicionada();
+      onAddedCity();
     } catch (errors) {
       // console.log(errors.response.data.errors.Estado);
       toast.error(errors.response.data);

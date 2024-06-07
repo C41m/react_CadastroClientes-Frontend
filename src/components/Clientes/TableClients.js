@@ -6,12 +6,12 @@ import FormCliente from "./FormCliente";
 import "./styles/TableClientes.css";
 import { toast } from "react-toastify";
 
-const TableClients = ({ clientes, fetchData, onDeletarClick, loading }) => {
-  const [sortedClientes, setSortedClientes] = useState(clientes);
+const TableClients = ({ clientes, fetchData, onDelteClick, loading }) => {
+  const [sortedClients, setSortedClients] = useState(clientes);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [clienteIdParaExcluir, setClienteIdParaExcluir] = useState(null);
+  const [clientIdToDelete, setClientIdToDelete] = useState(null);
   const [modo, setModo] = useState("");
-  const [clienteParaEditar, setClienteParaEditar] = useState(null);
+  const [clientToEdit, setClientToEdit] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "id",
@@ -22,34 +22,34 @@ const TableClients = ({ clientes, fetchData, onDeletarClick, loading }) => {
 
   // Atualiza a lista de clientes
   useEffect(() => {
-    setSortedClientes(clientes);
+    setSortedClients(clientes);
   }, [clientes]);
 
   // Editar cliente
-  const handleEditarClick = (cliente) => {
+  const handleEditClick = (cliente) => {
     setModo("editar");
-    setClienteParaEditar(cliente);
+    setClientToEdit(cliente);
     setShowModal(true);
   };
 
-  const handleClienteAdicionado = () => {
+  const handleClientAdded = () => {
     fetchData();
     setShowModal(false);
   };
 
   const handleShowModal = (clienteId) => {
-    setClienteIdParaExcluir(clienteId);
+    setClientIdToDelete(clienteId);
     setShowConfirmationModal(true);
   };
 
   const handleCloseModal = () => {
     setShowConfirmationModal(false);
-    setClienteIdParaExcluir(null);
+    setClientIdToDelete(null);
   };
 
   const handleConfirmDelete = () => {
-    if (clienteIdParaExcluir !== null) {
-      onDeletarClick(clienteIdParaExcluir);
+    if (clientIdToDelete !== null) {
+      onDelteClick(clientIdToDelete);
       handleCloseModal();
       toast.success("Cliente exlcuido!");
     }
@@ -64,7 +64,7 @@ const TableClients = ({ clientes, fetchData, onDeletarClick, loading }) => {
 
     setSortConfig({ key, direcao });
 
-    const sorted = [...sortedClientes].sort((a, b) => {
+    const sorted = [...sortedClients].sort((a, b) => {
       if (a[key] < b[key]) {
         return direcao === "crescente" ? -1 : 1;
       }
@@ -73,7 +73,7 @@ const TableClients = ({ clientes, fetchData, onDeletarClick, loading }) => {
       }
       return 0;
     });
-    setSortedClientes(sorted);
+    setSortedClients(sorted);
   };
 
   const renderSortIcon = (key) => {
@@ -138,7 +138,7 @@ const TableClients = ({ clientes, fetchData, onDeletarClick, loading }) => {
                 </tr>
               </thead>
               <tbody>
-                {sortedClientes.reverse().map((cliente) => (
+                {sortedClients.reverse().map((cliente) => (
                   <tr key={cliente.id}>
                     <td>{cliente.id}</td>
                     <td>{cliente.nome}</td>
@@ -155,7 +155,7 @@ const TableClients = ({ clientes, fetchData, onDeletarClick, loading }) => {
                     <td className="center-column">
                       <Button
                         variant=""
-                        onClick={() => handleEditarClick(cliente)}
+                        onClick={() => handleEditClick(cliente)}
                         className="mr-2"
                       >
                         <FaEdit />
@@ -194,8 +194,8 @@ const TableClients = ({ clientes, fetchData, onDeletarClick, loading }) => {
 
             <FormCliente
               modo={modo}
-              clienteParaEditar={clienteParaEditar}
-              onClienteAdicionado={handleClienteAdicionado}
+              clientToEdit={clientToEdit}
+              onClienteAdicionado={handleClientAdded}
               showModal={showModal}
               onHide={setCloseModal}
             />

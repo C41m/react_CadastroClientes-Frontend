@@ -7,15 +7,15 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/TableCidades.css";
 
-const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
+const TableCidades = ({ cidades, onEditedCity, onCityRemoved }) => {
   const [editMode, setEditMode] = useState(null);
-  const [editedCidade, setEditedCidade] = useState({
+  const [editedCity, setEditedCity] = useState({
     id: null,
     cidade: "",
     estado: "",
   });
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [cidadeToDelete, setCidadeToDelete] = useState(null);
+  const [cityToDelete, setCityToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleEditClick = (id) => {
@@ -23,7 +23,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
     const cidade = cidades.find((cidade) => cidade.id === id);
 
     if (cidade) {
-      setEditedCidade({
+      setEditedCity({
         id: cidade.id,
         cidade: cidade.cidade,
         estado: cidade.estado,
@@ -34,11 +34,11 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
   const handleSaveClick = async () => {
     // Verificações do campo de edição
     try {
-      if (editedCidade.estado.length === 0) {
+      if (editedCity.estado.length === 0) {
         toast.error("Digite a sigla do estado.");
         return;
       }
-      if (editedCidade.estado.length < 2) {
+      if (editedCity.estado.length < 2) {
         toast.error("Digite a sigla do estado corretamente.");
         return;
       }
@@ -46,15 +46,15 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
       const response = await axios.put(
         `https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade/`,
         {
-          ...editedCidade,
-          cidade: editedCidade.cidade.toUpperCase(),
-          estado: editedCidade.estado.toUpperCase(),
+          ...editedCity,
+          cidade: editedCity.cidade.toUpperCase(),
+          estado: editedCity.estado.toUpperCase(),
         }
       );
 
       if (response.data) {
         toast.success("Cidade editada com sucesso!");
-        onCidadeEditada();
+        onEditedCity();
         setEditMode(null);
       } else {
         toast.error(response.data);
@@ -66,19 +66,19 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
   };
 
   const handleDeleteClick = async (id) => {
-    setCidadeToDelete(id);
+    setCityToDelete(id);
     setShowConfirmationModal(true);
   };
 
   const confirmDelete = async () => {
     try {
       const response = await axios.delete(
-        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade?id=${cidadeToDelete}`
+        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade?id=${cityToDelete}`
       );
 
       if (response.data) {
         toast.success("Cidade removida com sucesso!");
-        onCidadeRemovida();
+        onCityRemoved();
         setShowConfirmationModal(false);
       } else {
         toast.error(response.data);
@@ -91,7 +91,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
 
   const cancelDelete = () => {
     setShowConfirmationModal(false);
-    setCidadeToDelete(null);
+    setCityToDelete(null);
   };
 
   const handleSearchChange = (e) => {
@@ -105,7 +105,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
   };
 
   const handleCidadeChange = (e) => {
-    setEditedCidade({ ...editedCidade, cidade: e.target.value.toUpperCase() });
+    setEditedCity({ ...editedCity, cidade: e.target.value.toUpperCase() });
   };
 
   const handleEstadoChange = (e) => {
@@ -116,7 +116,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
     const containsSpaces = /\s/.test(estado);
 
     if (estado.length <= 2 && !containsNumbers && !containsSpaces) {
-      setEditedCidade({ ...editedCidade, estado });
+      setEditedCity({ ...editedCity, estado });
     }
   };
 
@@ -161,7 +161,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
                       className="form-control"
                       size="sm"
                       type="text"
-                      value={editedCidade.cidade}
+                      value={editedCity.cidade}
                       onChange={handleCidadeChange}
                     />
                   ) : (
@@ -173,7 +173,7 @@ const TableCidades = ({ cidades, onCidadeEditada, onCidadeRemovida }) => {
                     <FormControl
                       className="form-control-cidade"
                       type="text"
-                      value={editedCidade.estado}
+                      value={editedCity.estado}
                       onChange={handleEstadoChange}
                     />
                   ) : (
