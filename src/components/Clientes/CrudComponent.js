@@ -28,7 +28,7 @@ const CrudComponent = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente"
+        "https://cadastroclientescaiofernando.azurewebsites.net/clientes"
       );
       setClientes(response.data);
       setFiltered(false);
@@ -56,7 +56,7 @@ const CrudComponent = () => {
 
     try {
       const response = await axios.get(
-        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cliente/FindByName?nome=${nome}&sobrenome=${sobrenome}`
+        `https://cadastroclientescaiofernando.azurewebsites.net/clientes/buscar?nome=${nome}&sobrenome=${sobrenome}`
       );
       setClientes(response.data);
       setFiltered(true);

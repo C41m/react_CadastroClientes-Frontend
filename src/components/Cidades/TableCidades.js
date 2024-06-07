@@ -44,7 +44,7 @@ const TableCidades = ({ cidades, onCityEdited, onCityRemoved }) => {
       }
 
       const response = await axios.put(
-        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade/`,
+        `https://cadastroclientescaiofernando.azurewebsites.net/cidades/${editedCity.id}`,
         {
           ...editedCity,
           cidade: editedCity.cidade.toUpperCase(),
@@ -73,7 +73,7 @@ const TableCidades = ({ cidades, onCityEdited, onCityRemoved }) => {
   const confirmDelete = async () => {
     try {
       const response = await axios.delete(
-        `https://cadastroclientescaiofernando.azurewebsites.net/api/Cidade?id=${cityToDelete}`
+        `https://cadastroclientescaiofernando.azurewebsites.net/cidades/${cityToDelete}`
       );
 
       if (response.data) {
